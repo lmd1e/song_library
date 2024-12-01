@@ -1,0 +1,209 @@
+basePath: /
+definitions:
+  models.Song:
+    properties:
+      group:
+        type: string
+      id:
+        type: integer
+      link:
+        type: string
+      release_date:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+  requests.AddSongRequest:
+    properties:
+      group:
+        type: string
+      song:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API для онлайн библиотеки песен
+  title: Song Library API
+  version: "1.0"
+paths:
+  /songs:
+    get:
+      consumes:
+      - application/json
+      description: Получение данных библиотеки с фильтрацией по всем полям и пагинацией
+      parameters:
+      - description: Фильтр по группе
+        in: query
+        name: group
+        type: string
+      - description: Фильтр по названию песни
+        in: query
+        name: song
+        type: string
+      - description: Количество записей на странице
+        in: query
+        name: limit
+        type: integer
+      - description: Смещение (страница)
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Song'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получение данных библиотеки с фильтрацией и пагинацией
+      tags:
+      - Songs
+    post:
+      consumes:
+      - application/json
+      description: Добавление новой песни в формате JSON
+      parameters:
+      - description: Данные песни
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/requests.AddSongRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Song'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Добавление новой песни
+      tags:
+      - Songs
+  /songs/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаление песни по ID
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Удаление песни
+      tags:
+      - Songs
+    put:
+      consumes:
+      - application/json
+      description: Изменение данных песни по ID
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Данные песни
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/models.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Song'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Изменение данных песни
+      tags:
+      - Songs
+  /songs/{id}/text:
+    get:
+      consumes:
+      - application/json
+      description: Получение текста песни с пагинацией по куплетам
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Количество куплетов на странице
+        in: query
+        name: limit
+        type: integer
+      - description: Смещение (страница)
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получение текста песни с пагинацией по куплетам
+      tags:
+      - Songs
+swagger: "2.0"

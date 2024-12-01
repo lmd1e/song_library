@@ -1,14 +1,14 @@
 package routes
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/lmd1e/song_library/controllers"
+	"github.com/gin-gonic/gin"
+	"github.com/lmd1e/song_library/app/controllers"
 )
 
-func RegisterSongRoutes(router *mux.Router, controller *controllers.SongController) {
-	router.HandleFunc("/songs", controller.GetSongs).Methods("GET")
-	router.HandleFunc("/songs/{id}/text", controller.GetSongText).Methods("GET")
-	router.HandleFunc("/songs/{id}", controller.DeleteSong).Methods("DELETE")
-	router.HandleFunc("/songs/{id}", controller.UpdateSong).Methods("PUT")
-	router.HandleFunc("/songs", controller.AddSong).Methods("POST")
+func RegisterSongRoutes(router *gin.Engine, controller *controllers.SongController) {
+	router.GET("/songs", controller.GetSongs)
+	router.GET("/songs/:id/text", controller.GetSongText)
+	router.DELETE("/songs/:id", controller.DeleteSong)
+	router.PUT("/songs/:id", controller.UpdateSong)
+	router.POST("/songs", controller.AddSong)
 }

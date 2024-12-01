@@ -3,6 +3,7 @@ package requests
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -18,7 +19,8 @@ type SongDetail struct {
 }
 
 func GetSongDetail(group, song string) (*SongDetail, error) {
-	resp, err := http.Get("http://external-api.com/info?group=" + group + "&song=" + song)
+	externalAPIURL := os.Getenv("EXTERNAL_API_URL")
+	resp, err := http.Get(externalAPIURL + group + "&song=" + song)
 	if err != nil {
 		return nil, err
 	}
