@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: my-postgres
+    environment:
+      POSTGRES_PASSWORD: PASSWORD
+      POSTGRES_DB: POSTGRES_DB
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: my-app
+    environment:
+      DATABASE_URL: postgres://postgres:PASSWORD@postgres:5432/POSTGRES_DB?sslmode=disable
+      EXTERNAL_API_URL: http://external-api.com/info
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
